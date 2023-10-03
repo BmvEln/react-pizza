@@ -3,6 +3,8 @@ import Categories from '../../components/Categories/Categories';
 import PizzaBlock from '../../components/PizzaBlock/PizzaBlock';
 import PizzaSkeleton from '../../components/PizzaBlock/PizzaSkeleton';
 import Sort from '../../components/Sort/Sort';
+import Paginate from '../../components/Paginate/Paginate';
+
 // import { PIZZA_API_URL } from '../../Constants/Constants';
 // import { usePizzas } from '../../hooks/usePizzas';
 
@@ -22,9 +24,10 @@ const Home = ({ searchText }) => {
   const [categoryNumber, setCategoryNumber] = useState(0);
   const [sortMethod, setSortMethod] = useState({ name: 'популярности', sortProperty: 'rating' });
 
+  const [presentPage, setPresentPage] = useState(1);
+
   useEffect(() => {
     setLoading(true);
-
     // Переменные для fetch запроса
     const category = categoryNumber > 0 ? `category=${categoryNumber}` : '';
     const sortBy = sortMethod.sortProperty.replace('-', '');
@@ -32,7 +35,7 @@ const Home = ({ searchText }) => {
     const search = searchText ? `&search=${searchText}` : '';
 
     fetch(
-      `https://6502df88a0f2c1f3faeb039b.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}${search}`,
+      `https://6502df88a0f2c1f3faeb039b.mockapi.io/items?page=${presentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
     )
       .then((response) => response.json())
       .then((pizzas) => {
@@ -41,7 +44,7 @@ const Home = ({ searchText }) => {
       })
       .catch((error) => setError(error.message));
     window.scrollTo(0, 0);
-  }, [categoryNumber, sortMethod, searchText]);
+  }, [categoryNumber, sortMethod, searchText, presentPage]);
 
   // console.log(categoryNumber, sortMethod);
 
@@ -58,9 +61,10 @@ const Home = ({ searchText }) => {
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
         {loading
-          ? [...new Array(6)].map((_, index) => <PizzaSkeleton key={index} />)
+          ? [...new Array(4)].map((_, index) => <PizzaSkeleton key={index} />)
           : pizzas.map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />)}
       </div>
+      <Paginate onChangePage={(number) => setPresentPage(number)} />
     </div>
   );
 };
