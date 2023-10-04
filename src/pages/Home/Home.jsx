@@ -4,16 +4,20 @@ import PizzaBlock from '../../components/PizzaBlock/PizzaBlock';
 import PizzaSkeleton from '../../components/PizzaBlock/PizzaSkeleton';
 import Sort from '../../components/Sort/Sort';
 import Paginate from '../../components/Paginate/Paginate';
+import { useContext } from 'react';
+import { SearchContext } from '../../App';
 
 // import { PIZZA_API_URL } from '../../Constants/Constants';
 // import { usePizzas } from '../../hooks/usePizzas';
 
-const Home = ({ searchText }) => {
+const Home = () => {
   // const { error, loading, getPizzas } = usePizzas(PIZZA_API_URL);
   // useEffect(() => {
   //   getPizzas().then((value) => setPizzas(value));
   //   window.scrollTo(0, 0);
   // }, []);
+
+  const { searchText } = useContext(SearchContext);
 
   // Состояния для получения пицц
   const [pizzas, setPizzas] = useState([]);

@@ -1,7 +1,9 @@
 import styles from './Search.module.scss';
+import { SearchContext } from '../../App';
+import { useContext } from 'react';
 
-const Search = ({ searchText, setSearchText }) => {
-  console.log(searchText);
+const Search = () => {
+  const { searchText, setSearchText } = useContext(SearchContext);
 
   return (
     <div className={styles.search}>
@@ -9,7 +11,7 @@ const Search = ({ searchText, setSearchText }) => {
         className={styles.searchIcon}
         height="512px"
         id="Layer_1"
-        enable-background="new 0 0 512 512"
+        enableBackground="new 0 0 512 512"
         version="1.1"
         viewBox="0 0 512 512"
         width="512px"
