@@ -28,7 +28,7 @@ const Search = () => {
         <svg
           className={styles.clearIcon}
           onClick={() => setSearchText('')}
-          enable-background="new 0 0 26 26"
+          enableBackground="new 0 0 26 26"
           id="Слой_1"
           version="1.1"
           viewBox="0 0 26 26"

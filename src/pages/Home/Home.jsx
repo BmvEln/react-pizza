@@ -7,16 +7,7 @@ import Paginate from '../../components/Paginate/Paginate';
 import { useContext } from 'react';
 import { SearchContext } from '../../App';
 
-// import { PIZZA_API_URL } from '../../Constants/Constants';
-// import { usePizzas } from '../../hooks/usePizzas';
-
 const Home = () => {
-  // const { error, loading, getPizzas } = usePizzas(PIZZA_API_URL);
-  // useEffect(() => {
-  //   getPizzas().then((value) => setPizzas(value));
-  //   window.scrollTo(0, 0);
-  // }, []);
-
   const { searchText } = useContext(SearchContext);
 
   // Состояния для получения пицц
