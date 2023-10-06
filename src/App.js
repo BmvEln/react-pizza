@@ -11,26 +11,32 @@ import Cart from './pages/Cart/Cart';
 import { createContext } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { decrement, increment } from './redux/slices/counterSlice';
+import { addition, subtraction, multiplication, division } from './redux/slices/calculatorSlice';
 
 export const SearchContext = createContext('');
 
 function App() {
   const [searchText, setSearchText] = useState('');
 
-  const count = useSelector((state) => state.counter.value);
+  const count = useSelector((state) => state.calculator.value);
   const dispatch = useDispatch();
 
   return (
     <div className="App">
       <div>
         <div>
-          <button aria-label="Increment value" onClick={() => dispatch(increment())}>
-            Increment
+          <button aria-label="Addition value" onClick={() => dispatch(addition())}>
+            Addition
           </button>
           <span>{count}</span>
-          <button aria-label="Decrement value" onClick={() => dispatch(decrement())}>
-            Decrement
+          <button aria-label="Subtraction value" onClick={() => dispatch(subtraction())}>
+            Subtraction
+          </button>
+          <button aria-label="Multiplication value" onClick={() => dispatch(multiplication())}>
+            Multiplication
+          </button>
+          <button aria-label="Division value" onClick={() => dispatch(division())}>
+            Division
           </button>
         </div>
       </div>
