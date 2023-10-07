@@ -6,27 +6,42 @@ import Sort from '../../components/Sort/Sort';
 import Paginate from '../../components/Paginate/Paginate';
 import { useContext } from 'react';
 import { SearchContext } from '../../App';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCategoryNumber } from '../../redux/slices/filterSlice';
 
 const Home = () => {
-  const { searchText } = useContext(SearchContext);
+  const searchText = useContext(SearchContext);
 
   // Состояния для получения пицц
   const [pizzas, setPizzas] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
+  // 1
   // Состояния для проброса в компоненты
-  const [categoryNumber, setCategoryNumber] = useState(0);
-  const [sortMethod, setSortMethod] = useState({ name: 'популярности', sortProperty: 'rating' });
+  // const [categoryNumber, setCategoryNumber] = useState(0);
+  // const [sortMethod, setSortMethod] = useState({ name: 'популярности', sortProperty: 'rating' });
+
+  // 2
+  // const categoryNumber = useSelector((state) => state.filter.categoryNumber);
+  // const categoryNumber = useSelector((state) => state.filter.sort.sortProperty);
+
+  // 3
+  const { categoryNumber, sort } = useSelector((state) => state.filter);
+  const dispatch = useDispatch();
+
+  const onClickCategory = (id) => {
+    dispatch(setCategoryNumber(id));
+  };
 
   const [presentPage, setPresentPage] = useState(1);
 
   useEffect(() => {
     setLoading(true);
-    // Переменные для fetch запроса
+
     const category = categoryNumber > 0 ? `category=${categoryNumber}` : '';
-    const sortBy = sortMethod.sortProperty.replace('-', '');
-    const order = sortMethod.sortProperty.includes('-') ? 'asc' : 'desc';
+    const sortBy = sort.sortProperty.replace('-', '');
+    const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
     const search = searchText ? `&search=${searchText}` : '';
 
     fetch(
@@ -39,9 +54,7 @@ const Home = () => {
       })
       .catch((error) => setError(error.message));
     window.scrollTo(0, 0);
-  }, [categoryNumber, sortMethod, searchText, presentPage]);
-
-  // console.log(categoryNumber, sortMethod);
+  }, [categoryNumber, sort.sortProperty, searchText, presentPage]);
 
   if (!pizzas) {
     return <h2 className="headingError">{`Error: ${error}`}</h2>;
@@ -50,8 +63,9 @@ const Home = () => {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories value={categoryNumber} onClickCategory={(index) => setCategoryNumber(index)} />
-        <Sort value={sortMethod} onClickSort={(index) => setSortMethod(index)} />
+        <Categories value={categoryNumber} onClickCategory={onClickCategory} />
+        {/* <Sort value={sortMethod} onClickSort={(index) => setSortMethod(index)} /> */}
+        <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">

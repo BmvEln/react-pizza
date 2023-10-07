@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import styles from './Categories.module.scss';
 
 const Categories = ({ value, onClickCategory }) => {

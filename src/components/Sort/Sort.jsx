@@ -1,27 +1,32 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './Sort.module.scss';
+import { setSortMethod } from '../../redux/slices/filterSlice';
 
-const Sort = ({ value, onClickSort }) => {
+const typesSorts = [
+  { name: 'популярности (DESC)', sortProperty: 'rating' },
+  { name: 'популярности (ASC)', sortProperty: '-rating' },
+
+  { name: 'цене (DESC)', sortProperty: 'price' },
+  { name: 'цене (ASC)', sortProperty: '-price' },
+
+  { name: 'алфавиту (DESC)', sortProperty: 'alphabet' },
+  { name: 'алфавиту (ASC)', sortProperty: '-alphabet' },
+];
+
+const Sort = () => {
+  const sort = useSelector((state) => state.filter.sort);
+  console.log(sort);
+  const dispatch = useDispatch();
+
   const [isActiveMenu, setIsActiveMenu] = useState(false);
-  const typesSorts = [
-    { name: 'популярности (DESC)', sortProperty: 'rating' },
-    { name: 'популярности (ASC)', sortProperty: '-rating' },
-
-    { name: 'цене (DESC)', sortProperty: 'price' },
-    { name: 'цене (ASC)', sortProperty: '-price' },
-
-    { name: 'алфавиту (DESC)', sortProperty: 'alphabet' },
-    { name: 'алфавиту (ASC)', sortProperty: '-alphabet' },
-  ];
-
-  // console.log('value =', value);
 
   const onClickSortHandler = () => {
     setIsActiveMenu(!isActiveMenu);
   };
 
-  const onClickSortItem = (index) => {
-    onClickSort(index);
+  const onClickSortItem = (obj) => {
+    dispatch(setSortMethod(obj));
     setIsActiveMenu(false);
   };
 
@@ -40,7 +45,7 @@ const Sort = ({ value, onClickSort }) => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={onClickSortHandler}>{value.name}</span>
+        <span onClick={onClickSortHandler}>{sort.name}</span>
       </div>
       {isActiveMenu && (
         <div className={styles.sort__popup}>
@@ -49,7 +54,7 @@ const Sort = ({ value, onClickSort }) => {
               <li
                 key={index}
                 onClick={() => onClickSortItem(typeSort)}
-                className={value.sortProperty === typeSort.sortProperty ? styles.active : ''}>
+                className={sort.sortProperty === typeSort.sortProperty ? styles.active : ''}>
                 {typeSort.name}
               </li>
             ))}
