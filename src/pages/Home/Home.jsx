@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import { SearchContext } from '../../App';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryNumber } from '../../redux/slices/filterSlice';
+import axios from 'axios';
 
 const Home = () => {
   const searchText = useContext(SearchContext);
@@ -17,16 +18,6 @@ const Home = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // 1
-  // Состояния для проброса в компоненты
-  // const [categoryNumber, setCategoryNumber] = useState(0);
-  // const [sortMethod, setSortMethod] = useState({ name: 'популярности', sortProperty: 'rating' });
-
-  // 2
-  // const categoryNumber = useSelector((state) => state.filter.categoryNumber);
-  // const categoryNumber = useSelector((state) => state.filter.sort.sortProperty);
-
-  // 3
   const { categoryNumber, sort } = useSelector((state) => state.filter);
   const dispatch = useDispatch();
 
@@ -44,12 +35,12 @@ const Home = () => {
     const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
     const search = searchText ? `&search=${searchText}` : '';
 
-    fetch(
-      `https://6502df88a0f2c1f3faeb039b.mockapi.io/items?page=${presentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
-    )
-      .then((response) => response.json())
-      .then((pizzas) => {
-        setPizzas(pizzas);
+    axios
+      .get(
+        `https://6502df88a0f2c1f3faeb039b.mockapi.io/items?page=${presentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
+      )
+      .then((response) => {
+        setPizzas(response.data);
         setLoading(false);
       })
       .catch((error) => setError(error.message));
@@ -64,7 +55,6 @@ const Home = () => {
     <div className="container">
       <div className="content__top">
         <Categories value={categoryNumber} onClickCategory={onClickCategory} />
-        {/* <Sort value={sortMethod} onClickSort={(index) => setSortMethod(index)} /> */}
         <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
