@@ -1,15 +1,40 @@
 import styles from './Search.module.scss';
 import { SearchContext } from '../../App';
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
+import debounce from 'lodash.debounce';
 import { useRef } from 'react';
+import { useState } from 'react';
 
 const Search = () => {
+  // Локальный инпут, что моментально отобразить значение в инпуте
+  const [valueInput, setValueInput] = useState('');
+
   const { searchText, setSearchText } = useContext(SearchContext);
   const inputRef = useRef();
 
+  // useCallback чтобы функция не пересоздавалась
+  const inputDebounce = useCallback(
+    debounce((str) => {
+      console.log(str);
+      setSearchText(str);
+    }, 500),
+    [],
+  );
+
   const clearInput = () => {
     setSearchText('');
+    setValueInput('');
     inputRef.current.focus();
+  };
+
+  const updateInputControl = (event) => {
+    setValueInput(event.target.value);
+    inputDebounce();
+  };
+
+  const inputControl = (event) => {
+    setValueInput(event.target.value);
+    inputDebounce(event.target.value);
   };
 
   return (
@@ -29,10 +54,10 @@ const Search = () => {
         ref={inputRef}
         className={styles.input}
         placeholder="Ввести название пиццы..."
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
+        value={valueInput}
+        onChange={inputControl}
       />
-      {searchText && (
+      {valueInput && (
         <svg
           className={styles.clearIcon}
           onClick={clearInput}
