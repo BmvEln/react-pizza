@@ -17,7 +17,7 @@ const Search = () => {
     debounce((str) => {
       console.log(str);
       setSearchText(str);
-    }, 500),
+    }, 250),
     [],
   );
 
