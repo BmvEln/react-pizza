@@ -7,7 +7,7 @@ import Paginate from '../../components/Paginate/Paginate';
 import { useContext } from 'react';
 import { SearchContext } from '../../App';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCategoryNumber } from '../../redux/slices/filterSlice';
+import { setCategoryNumber, setPresentPage } from '../../redux/slices/filterSlice';
 import axios from 'axios';
 
 const Home = () => {
@@ -18,14 +18,16 @@ const Home = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const { categoryNumber, sort } = useSelector((state) => state.filter);
+  const { categoryNumber, sort, presentPage } = useSelector((state) => state.filter);
   const dispatch = useDispatch();
 
   const onClickCategory = (id) => {
     dispatch(setCategoryNumber(id));
   };
 
-  const [presentPage, setPresentPage] = useState(1);
+  const alterPresentPage = (number) => {
+    dispatch(setPresentPage(number));
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -63,7 +65,7 @@ const Home = () => {
           ? [...new Array(4)].map((_, index) => <PizzaSkeleton key={index} />)
           : pizzas.map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />)}
       </div>
-      <Paginate onChangePage={(number) => setPresentPage(number)} />
+      <Paginate presentPage={presentPage} onChangePage={alterPresentPage} />
     </div>
   );
 };

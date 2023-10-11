@@ -27,11 +27,6 @@ const Search = () => {
     inputRef.current.focus();
   };
 
-  const updateInputControl = (event) => {
-    setValueInput(event.target.value);
-    inputDebounce();
-  };
-
   const inputControl = (event) => {
     setValueInput(event.target.value);
     inputDebounce(event.target.value);
