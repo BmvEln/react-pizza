@@ -35,7 +35,14 @@ const Home = () => {
     const category = categoryNumber > 0 ? `category=${categoryNumber}` : '';
     const sortBy = sort.sortProperty.replace('-', '');
     const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
+    console.log('searchText', searchText);
+    console.log('`&search=${searchText}`', `${searchText}`);
     const search = searchText ? `&search=${searchText}` : '';
+
+    console.log(
+      "searchText ? `&search=${searchText}` : ''",
+      searchText ? `&search=${searchText}` : '',
+    );
 
     axios
       .get(

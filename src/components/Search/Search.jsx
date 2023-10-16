@@ -15,7 +15,7 @@ const Search = () => {
   // useCallback чтобы функция не пересоздавалась
   const inputDebounce = useCallback(
     debounce((str) => {
-      console.log(str);
+      console.log('str', str);
       setSearchText(str);
     }, 250),
     [],
