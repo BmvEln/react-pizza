@@ -1,7 +1,14 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './Sort.module.scss';
+import { setSortMethod } from '../../redux/slices/filterSlice';
 
-const Sort = ({ value, onClickSort }) => {
+const Sort = () => {
+  const sort = useSelector((state) => state.filterReducer.sort);
+  const dispatch = useDispatch();
+
+  console.log('state.filter.sort', sort);
+
   const [isActiveMenu, setIsActiveMenu] = useState(false);
   const typesSorts = [
     { name: 'популярности (DESC)', sortProperty: 'rating' },
@@ -14,17 +21,14 @@ const Sort = ({ value, onClickSort }) => {
     { name: 'алфавиту (ASC)', sortProperty: '-alphabet' },
   ];
 
-  // console.log('value =', value);
-
   const onClickSortHandler = () => {
     setIsActiveMenu(!isActiveMenu);
   };
 
-  const onClickSortItem = (index) => {
-    onClickSort(index);
+  const onClickSortItem = (obj) => {
+    dispatch(setSortMethod(obj));
     setIsActiveMenu(false);
   };
-
   return (
     <div className={styles.sort}>
       <div className={styles.sort__label}>
@@ -40,7 +44,7 @@ const Sort = ({ value, onClickSort }) => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={onClickSortHandler}>{value.name}</span>
+        <span onClick={onClickSortHandler}>{sort.name}</span>
       </div>
       {isActiveMenu && (
         <div className={styles.sort__popup}>
@@ -49,7 +53,7 @@ const Sort = ({ value, onClickSort }) => {
               <li
                 key={index}
                 onClick={() => onClickSortItem(typeSort)}
-                className={value.sortProperty === typeSort.sortProperty ? styles.active : ''}>
+                className={sort.sortProperty === typeSort.sortProperty ? styles.active : ''}>
                 {typeSort.name}
               </li>
             ))}
