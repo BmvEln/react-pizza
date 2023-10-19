@@ -4,8 +4,8 @@ import styles from './Sort.module.scss';
 import { setSortMethod } from '../../redux/slices/filterSlice';
 
 const Sort = () => {
-  const sort = useSelector((state) => state.filterReducer.sort);
   const dispatch = useDispatch();
+  const sort = useSelector((state) => state.filterReducer.sort);
 
   console.log('state.filter.sort', sort);
 

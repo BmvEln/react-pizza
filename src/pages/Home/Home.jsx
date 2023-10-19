@@ -8,7 +8,8 @@ import Sort from '../../components/Sort/Sort';
 import Paginate from '../../components/Paginate/Paginate';
 import { useContext } from 'react';
 import { SearchContext } from '../../App';
-import { setCategoryNumber } from '../../redux/slices/filterSlice';
+import { setCategoryNumber, setPresentPage } from '../../redux/slices/filterSlice';
+import axios from 'axios';
 
 const Home = () => {
   const { searchText } = useContext(SearchContext);
@@ -18,15 +19,15 @@ const Home = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Состояния для проброса в компоненты
   const dispatch = useDispatch();
-  const { categoryNumber, sort } = useSelector((state) => state.filterReducer);
-
-  const [presentPage, setPresentPage] = useState(1);
+  const { categoryNumber, sort, presentPage } = useSelector((state) => state.filterReducer);
 
   const onClickCategory = (id) => {
-    console.log(id);
     dispatch(setCategoryNumber(id));
+  };
+
+  const alterPresentPage = (number) => {
+    dispatch(setPresentPage(number));
   };
 
   useEffect(() => {
@@ -37,12 +38,12 @@ const Home = () => {
     const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
     const search = searchText ? `&search=${searchText}` : '';
 
-    fetch(
-      `https://6502df88a0f2c1f3faeb039b.mockapi.io/items?page=${presentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
-    )
-      .then((response) => response.json())
-      .then((pizzas) => {
-        setPizzas(pizzas);
+    axios
+      .get(
+        `https://6502df88a0f2c1f3faeb039b.mockapi.io/items?page=${presentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
+      )
+      .then((response) => {
+        setPizzas(response.data);
         setLoading(false);
       })
       .catch((error) => setError(error.message));
@@ -65,7 +66,7 @@ const Home = () => {
           ? [...new Array(4)].map((_, index) => <PizzaSkeleton key={index} />)
           : pizzas.map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />)}
       </div>
-      <Paginate onChangePage={(number) => setPresentPage(number)} />
+      <Paginate value={presentPage} onChangePage={alterPresentPage} />
     </div>
   );
 };
