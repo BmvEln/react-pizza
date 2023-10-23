@@ -3,23 +3,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './Sort.module.scss';
 import { setSortMethod } from '../../redux/slices/filterSlice';
 
+export const typesSorts = [
+  { name: 'популярности (DESC)', sortProperty: 'rating' },
+  { name: 'популярности (ASC)', sortProperty: '-rating' },
+
+  { name: 'цене (DESC)', sortProperty: 'price' },
+  { name: 'цене (ASC)', sortProperty: '-price' },
+
+  { name: 'алфавиту (DESC)', sortProperty: 'alphabet' },
+  { name: 'алфавиту (ASC)', sortProperty: '-alphabet' },
+];
+
 const Sort = () => {
   const dispatch = useDispatch();
   const sort = useSelector((state) => state.filterReducer.sort);
 
-  console.log('state.filter.sort', sort);
-
   const [isActiveMenu, setIsActiveMenu] = useState(false);
-  const typesSorts = [
-    { name: 'популярности (DESC)', sortProperty: 'rating' },
-    { name: 'популярности (ASC)', sortProperty: '-rating' },
-
-    { name: 'цене (DESC)', sortProperty: 'price' },
-    { name: 'цене (ASC)', sortProperty: '-price' },
-
-    { name: 'алфавиту (DESC)', sortProperty: 'alphabet' },
-    { name: 'алфавиту (ASC)', sortProperty: '-alphabet' },
-  ];
 
   const onClickSortHandler = () => {
     setIsActiveMenu(!isActiveMenu);

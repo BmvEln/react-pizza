@@ -1,11 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 
 import './App.css';
 import './scss/app.scss';
-
 import Header from './components/Header/Header';
+
 import Home from './pages/Home/Home';
 import NotFound from './pages/NotFound/NotFound';
 import Cart from './pages/Cart/Cart';
