@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './Sort.module.scss';
 import { setSortMethod } from '../../redux/slices/filterSlice';
+import { useRef } from 'react';
+import { useEffect } from 'react';
 
 export const typesSorts = [
   { name: 'популярности (DESC)', sortProperty: 'rating' },
@@ -17,6 +19,9 @@ export const typesSorts = [
 const Sort = () => {
   const dispatch = useDispatch();
   const sort = useSelector((state) => state.filterReducer.sort);
+  const sortPopupRef = useRef();
+
+  console.log(sortPopupRef);
 
   const [isActiveMenu, setIsActiveMenu] = useState(false);
 
@@ -28,8 +33,23 @@ const Sort = () => {
     dispatch(setSortMethod(obj));
     setIsActiveMenu(false);
   };
+
+  useEffect(() => {
+    // Так нельзя делать, но в случае если нужно обраиться к родительскому элементу body, то можно. Это исключение
+    // Sort mount
+    const onClickHandler = (e) => {
+      if (!(e.target.offsetParent === sortPopupRef.current)) {
+        setIsActiveMenu(false);
+        // click outside
+      }
+    };
+    document.body.addEventListener('click', onClickHandler);
+
+    // Sort unmount
+    return () => document.body.removeEventListener('click', onClickHandler);
+  }, []);
   return (
-    <div className={styles.sort}>
+    <div ref={sortPopupRef} className={styles.sort}>
       <div className={styles.sort__label}>
         <svg
           width="10"
